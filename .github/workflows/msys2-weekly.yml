@@ -1,5 +1,8 @@
 name: Emacs MSYS2 Weekly Build
 
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron: '0 6 * * 1' # Mondays 06:00 UTC (UTC only; runs can be delayed/skipped on idle repos)
@@ -115,4 +118,5 @@ jobs:
         gh release create "emacs-$env:EMACS_VERSION" `
           "C:/emacs-$env:EMACS_VERSION.zip" `
           --title "Emacs $env:EMACS_VERSION (mingw64)" `
+          --target main `  
           --notes "Upstream: https://github.com/emacs-mirror/emacs/commit/$env:EMACS_VERSION"

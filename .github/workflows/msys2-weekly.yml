@@ -99,7 +99,6 @@ jobs:
         make install
 
     - name: '📦 Pack'
-      shell: bash
       working-directory: emacs
       run: |
         git --no-pager log -m --abbrev-commit --date=relative -10

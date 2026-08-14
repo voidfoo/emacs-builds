@@ -57,6 +57,7 @@ jobs:
       uses: msys2/setup-msys2@v2
       with:
         msystem: ${{matrix.sys}}
+        cache: true
         update: true
         install: >-
           git zip base-devel
@@ -83,6 +84,15 @@ jobs:
           mingw-w64-x86_64-sqlite3
           mingw-w64-x86_64-libwinpthread
           mingw-w64-x86_64-texinfo
+          mingw-w64-x86_64-ccache
+    
+    - name: '📦 Cache ccache'
+      uses: actions/cache@v4
+      with:
+        path: C:\msys64\home\runneradmin\.ccache
+        key: ccache-${{ matrix.sys }}-${{ github.run_id }}
+        restore-keys: |
+          ccache-${{ matrix.sys }}-
 
     - name: '🚧 Build'
       run: |
@@ -97,9 +107,10 @@ jobs:
           --with-gnutls \
           --without-dbus \
           --without-pop \
+          CC="ccache gcc" \
           CFLAGS="-O2 -fno-optimize-sibling-calls"
-        make
-        make install
+        make -j$(nproc)
+        make install -j$(nproc)
 
     - name: '📦 Pack'
       working-directory: emacs

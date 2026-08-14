@@ -46,8 +46,8 @@ jobs:
         path: emacs
 
     - name: '📌 Set EMACS_VERSION'
-      working-directory: emacs
-      shell: cmd
+      shell: bash
+      working-directory: ./emacs
       run: echo "EMACS_VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
     - name: '${{ matrix.icon }} Setup MSYS2'
@@ -80,7 +80,6 @@ jobs:
           mingw-w64-x86_64-sqlite3
           mingw-w64-x86_64-libwinpthread
           mingw-w64-x86_64-texinfo
-          mingw-w64-x86_64-rust
 
     - name: '🚧 Build'
       run: |
@@ -100,6 +99,7 @@ jobs:
         make install
 
     - name: '📦 Pack'
+      shell: bash
       working-directory: emacs
       run: |
         git --no-pager log -m --abbrev-commit --date=relative -10

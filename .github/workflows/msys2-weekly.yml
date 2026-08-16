@@ -89,14 +89,17 @@ jobs:
     - name: '📦 Cache ccache'
       uses: actions/cache@v5
       with:
-        path: C:\msys64\home\runneradmin\.ccache
+        path: D:\ccache
         key: ccache-${{ matrix.sys }}-${{ github.run_id }}
         restore-keys: |
           ccache-${{ matrix.sys }}-
 
     - name: '🚧 Build'
+      env:
+        CCACHE_DIR: 'D:\ccache'
       run: |
         set -e
+        export CCACHE_DIR=/d/ccache
         cd ./emacs
         ./autogen.sh
         ./configure \

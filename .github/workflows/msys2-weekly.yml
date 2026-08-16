@@ -94,7 +94,7 @@ jobs:
         restore-keys: |
           ccache-${{ matrix.sys }}-
 
-    - name: '🚧 Build'
+    - name: '⚙️ Configure'
       env:
         CCACHE_DIR: 'D:\ccache'
       run: |
@@ -112,6 +112,14 @@ jobs:
           --without-pop \
           CC="ccache gcc" \
           CFLAGS="-O2 -fno-optimize-sibling-calls"
+
+    - name: '🚧 Make + Install'
+      env:
+        CCACHE_DIR: 'D:\ccache'
+      run: |
+        set -e
+        export CCACHE_DIR=/d/ccache
+        cd ./emacs
         make -j$(nproc)
         make install -j$(nproc)
  

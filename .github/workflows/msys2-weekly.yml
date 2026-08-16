@@ -111,6 +111,18 @@ jobs:
           CFLAGS="-O2 -fno-optimize-sibling-calls"
         make -j$(nproc)
         make install -j$(nproc)
+ 
+    - name: '📚 Pack runtime DLLs'
+      run: |
+        set -euo pipefail
+
+        dlls=(
+          "libtree-sitter-0.26.dll"
+          "libwinpthread-1.dll"
+        )
+
+        cd "${MINGW_PREFIX}/bin"
+        zip -9 "/c/emacs-mingw64-dlls.zip" "${dlls[@]}"
 
     - name: '📦 Pack'
       working-directory: emacs
@@ -128,6 +140,7 @@ jobs:
       run: |
         gh release create "emacs-$env:EMACS_VERSION" `
           "C:/emacs-$env:EMACS_VERSION.zip" `
+          "C:/emacs-mingw64-dlls.zip" `
           --title "Emacs $env:EMACS_VERSION (mingw64)" `
           --target main `
           --notes "Upstream: https://github.com/emacs-mirror/emacs/commit/$env:EMACS_VERSION"

@@ -116,10 +116,28 @@ jobs:
       run: |
         set -euo pipefail
 
-        dlls=(
-          "libtree-sitter-0.26.dll"
-          "libwinpthread-1.dll"
-        )
+         dlls=(
+           "libXpm-nox4.dll"
+           "libtiff-6.dll"
+           "libgif-7.dll"
+           "libpng16-16.dll"
+           "libjpeg-8.dll"
+           "librsvg-2-2.dll"
+           "libwebp-7.dll"
+           "libwebpdemux-2.dll"
+           "liblcms2-2.dll"
+           "libjansson-4.dll"
+           "libgccjit-0.dll"
+           "libxml2-16.dll"
+           "libgnutls-30.dll"
+           "zlib1.dll"
+           "libfreetype-6.dll"
+           "libharfbuzz-0.dll"
+           "libcairo-2.dll"
+           "libtree-sitter-0.26.dll"
+           "libsqlite3-0.dll"
+           "libwinpthread-1.dll"
+         )
 
         cd "${MINGW_PREFIX}/bin"
         zip -9 "/c/emacs-mingw64-dlls.zip" "${dlls[@]}"

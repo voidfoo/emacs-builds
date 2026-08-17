@@ -121,6 +121,7 @@ jobs:
         export CCACHE_DIR=/d/ccache
         cd ./emacs
         make -j$(nproc)
+        ccache -s
         make install -j$(nproc)
  
     - name: '📚 Pack runtime DLLs'

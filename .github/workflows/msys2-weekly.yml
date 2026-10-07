@@ -146,7 +146,7 @@ jobs:
           "libfreetype-6.dll"
           "libharfbuzz-0.dll"
           "libcairo-2.dll"
-          "libtree-sitter-0.26.dll"
+          "libtree-sitter-0.27.dll"
           "libsqlite3-0.dll"
           "libwinpthread-1.dll"
         )

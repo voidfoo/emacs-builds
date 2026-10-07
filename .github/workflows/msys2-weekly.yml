@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { icon: '🟦', sys: mingw64 }
+          - { icon: '🟦', sys: ucrt64 }
     name: 🚧${{ matrix.icon }} ${{ matrix.sys }}
     defaults:
       run:
@@ -53,39 +53,39 @@ jobs:
       working-directory: ./emacs
       run: echo "EMACS_VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
-    - name: '${{ matrix.icon }} Setup MSYS2'
+    - name: '${{ matrix.icon }} Setup MSYS2 UCRT64'
       uses: msys2/setup-msys2@v2
       with:
-        msystem: ${{matrix.sys}}
+        msystem: ${{ matrix.sys }}
         cache: true
         update: true
         install: >-
           git zip base-devel
-          mingw-w64-x86_64-autotools
-          mingw-w64-x86_64-toolchain
-          mingw-w64-x86_64-xpm-nox
-          mingw-w64-x86_64-libtiff
-          mingw-w64-x86_64-giflib
-          mingw-w64-x86_64-libpng
-          mingw-w64-x86_64-libjpeg-turbo
-          mingw-w64-x86_64-librsvg
-          mingw-w64-x86_64-libwebp
-          mingw-w64-x86_64-lcms2
-          mingw-w64-x86_64-jansson
-          mingw-w64-x86_64-libgccjit
-          mingw-w64-x86_64-libxml2
-          mingw-w64-x86_64-gnutls
-          mingw-w64-x86_64-zlib
-          mingw-w64-x86_64-ctags
-          mingw-w64-x86_64-freetype
-          mingw-w64-x86_64-harfbuzz
-          mingw-w64-x86_64-cairo
-          mingw-w64-x86_64-libtree-sitter
-          mingw-w64-x86_64-sqlite3
-          mingw-w64-x86_64-libwinpthread
-          mingw-w64-x86_64-texinfo
-          mingw-w64-x86_64-ccache
-    
+          mingw-w64-ucrt-x86_64-autotools
+          mingw-w64-ucrt-x86_64-toolchain
+          mingw-w64-ucrt-x86_64-xpm-nox
+          mingw-w64-ucrt-x86_64-libtiff
+          mingw-w64-ucrt-x86_64-giflib
+          mingw-w64-ucrt-x86_64-libpng
+          mingw-w64-ucrt-x86_64-libjpeg-turbo
+          mingw-w64-ucrt-x86_64-librsvg
+          mingw-w64-ucrt-x86_64-libwebp
+          mingw-w64-ucrt-x86_64-lcms2
+          mingw-w64-ucrt-x86_64-jansson
+          mingw-w64-ucrt-x86_64-libgccjit
+          mingw-w64-ucrt-x86_64-libxml2
+          mingw-w64-ucrt-x86_64-gnutls
+          mingw-w64-ucrt-x86_64-zlib
+          mingw-w64-ucrt-x86_64-ctags
+          mingw-w64-ucrt-x86_64-freetype
+          mingw-w64-ucrt-x86_64-harfbuzz
+          mingw-w64-ucrt-x86_64-cairo
+          mingw-w64-ucrt-x86_64-libtree-sitter
+          mingw-w64-ucrt-x86_64-sqlite3
+          mingw-w64-ucrt-x86_64-libwinpthread
+          mingw-w64-ucrt-x86_64-texinfo
+          mingw-w64-ucrt-x86_64-ccache
+
     - name: '📦 Cache ccache'
       uses: actions/cache@v5
       with:
@@ -123,36 +123,36 @@ jobs:
         make -j$(nproc)
         ccache -s
         make install -j$(nproc)
- 
+
     - name: '📚 Pack runtime DLLs'
       run: |
         set -euo pipefail
 
-         dlls=(
-           "libXpm-nox4.dll"
-           "libtiff-6.dll"
-           "libgif-7.dll"
-           "libpng16-16.dll"
-           "libjpeg-8.dll"
-           "librsvg-2-2.dll"
-           "libwebp-7.dll"
-           "libwebpdemux-2.dll"
-           "liblcms2-2.dll"
-           "libjansson-4.dll"
-           "libgccjit-0.dll"
-           "libxml2-16.dll"
-           "libgnutls-30.dll"
-           "zlib1.dll"
-           "libfreetype-6.dll"
-           "libharfbuzz-0.dll"
-           "libcairo-2.dll"
-           "libtree-sitter-0.26.dll"
-           "libsqlite3-0.dll"
-           "libwinpthread-1.dll"
-         )
+        dlls=(
+          "libXpm-nox4.dll"
+          "libtiff-6.dll"
+          "libgif-7.dll"
+          "libpng16-16.dll"
+          "libjpeg-8.dll"
+          "librsvg-2-2.dll"
+          "libwebp-7.dll"
+          "libwebpdemux-2.dll"
+          "liblcms2-2.dll"
+          "libjansson-4.dll"
+          "libgccjit-0.dll"
+          "libxml2-16.dll"
+          "libgnutls-30.dll"
+          "zlib1.dll"
+          "libfreetype-6.dll"
+          "libharfbuzz-0.dll"
+          "libcairo-2.dll"
+          "libtree-sitter-0.26.dll"
+          "libsqlite3-0.dll"
+          "libwinpthread-1.dll"
+        )
 
         cd "${MINGW_PREFIX}/bin"
-        zip -9 "/c/emacs-mingw64-dlls.zip" "${dlls[@]}"
+        zip -9 "/c/emacs-ucrt64-dlls.zip" "${dlls[@]}"
 
     - name: '📦 Pack'
       working-directory: emacs
@@ -170,7 +170,7 @@ jobs:
       run: |
         gh release create "emacs-$env:EMACS_VERSION" `
           "C:/emacs-$env:EMACS_VERSION.zip" `
-          "C:/emacs-mingw64-dlls.zip" `
-          --title "Emacs $env:EMACS_VERSION (mingw64)" `
+          "C:/emacs-ucrt64-dlls.zip" `
+          --title "Emacs $env:EMACS_VERSION (ucrt64)" `
           --target main `
           --notes "Upstream: https://github.com/emacs-mirror/emacs/commit/$env:EMACS_VERSION"
